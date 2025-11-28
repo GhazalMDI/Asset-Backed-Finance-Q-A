@@ -1,0 +1,30 @@
+{"q_id":"Q001","question":"What is the delinquency aging limit for an eligible receivable?","answers":["not more than 90 days past due","90 days past due"],"supports":[{"doc_id":"D001","sent_start":0,"sent_end":0}]}
+{"q_id":"Q002","question":"Are receivables from obligors rated below B- considered eligible?","answers":["No, they are ineligible","They are ineligible","No"],"supports":[{"doc_id":"D001","sent_start":1,"sent_end":1}]}
+{"q_id":"Q003","question":"What is the advance rate for prime auto loans?","answers":["90%","90 percent"],"supports":[{"doc_id":"D002","sent_start":0,"sent_end":0}]}
+{"q_id":"Q004","question":"Name two components of reserves in the borrowing base.","answers":["dilution reserve and concentration excess","concentration excess and ineligibles","dilution reserve and ineligibles"],"supports":[{"doc_id":"D003","sent_start":1,"sent_end":1}]}
+{"q_id":"Q005","question":"What OC ratio level causes an early amortization event?","answers":["below 102%","OC ratio falls below 102%"],"supports":[{"doc_id":"D005","sent_start":0,"sent_end":0}]}
+{"q_id":"Q006","question":"How often must real estate-backed loans be appraised?","answers":["every 12 months","at least annually"],"supports":[{"doc_id":"D006","sent_start":2,"sent_end":2}]}
+{"q_id":"Q007","question":"What is the single obligor concentration limit?","answers":["5%","five percent"],"supports":[{"doc_id":"D004","sent_start":0,"sent_end":0}]}
+{"q_id":"Q008","question":"What is the cap for the top 10 obligors?","answers":["30%","thirty percent"],"supports":[{"doc_id":"D004","sent_start":1,"sent_end":1}]}
+{"q_id":"Q009","question":"Within how many business days must funds be swept to the secured account?","answers":["2 business days","within 2 business days"],"supports":[{"doc_id":"D013","sent_start":1,"sent_end":1}]}
+{"q_id":"Q010","question":"Define the OC ratio.","answers":["collateral balance divided by outstanding facility balance","collateral divided by facility balance"],"supports":[{"doc_id":"D007","sent_start":0,"sent_end":0}]}
+{"q_id":"Q011","question":"How are assets without current valuations treated for borrowing base purposes?","answers":["100% haircut","subject to a 100% haircut"],"supports":[{"doc_id":"D006","sent_start":1,"sent_end":1}]}
+{"q_id":"Q012","question":"When is the trustee report due?","answers":["within 15 business days","15 business days"],"supports":[{"doc_id":"D008","sent_start":1,"sent_end":1}]}
+{"q_id":"Q013","question":"Under what condition are cross-border receivables eligible?","answers":["if currency risk is hedged","hedged for currency"],"supports":[{"doc_id":"D010","sent_start":0,"sent_end":0}]}
+{"q_id":"Q014","question":"What mitigations allow receivables with setoff rights to be eligible?","answers":["setoff waiver or deposit account control agreement","setoff waiver","deposit account control"],"supports":[{"doc_id":"D011","sent_start":0,"sent_end":1}]}
+{"q_id":"Q015","question":"What is paid first in the priority of payments?","answers":["trustee and administration fees","trustee fees"],"supports":[{"doc_id":"D014","sent_start":0,"sent_end":0}]}
+{"q_id":"Q016","question":"Is a backup servicer required at closing?","answers":["Yes","yes"],"supports":[{"doc_id":"D012","sent_start":0,"sent_end":0}]}
+{"q_id":"Q017","question":"How is concentration excess defined?","answers":["portion of pool above applicable limits","exposure above limits"],"supports":[{"doc_id":"D027","sent_start":0,"sent_end":0}]}
+{"q_id":"Q018","question":"At how many days past due are consumer receivables charged off?","answers":["120 days","120 days past due"],"supports":[{"doc_id":"D019","sent_start":0,"sent_end":0}]}
+{"q_id":"Q019","question":"What grace period does not constitute delinquency?","answers":["up to 5 days","5 days"],"supports":[{"doc_id":"D018","sent_start":0,"sent_end":0}]}
+{"q_id":"Q020","question":"How is the borrowing base calculated?","answers":["sum of eligible exposure times advance rate minus reserves","eligible exposure times advance rate minus reserves"],"supports":[{"doc_id":"D003","sent_start":0,"sent_end":0}]}
+{"q_id":"Q021","question":"How long is an appraisal valid before a new one is required?","answers":["12 months","twelve months"],"supports":[{"doc_id":"D024","sent_start":0,"sent_end":0}]}
+{"q_id":"Q022","question":"What advance rate applies to assets missing required documents?","answers":["0%","zero percent"],"supports":[{"doc_id":"D016","sent_start":0,"sent_end":0}]}
+{"q_id":"Q023","question":"Are receivables with unresolved disputes eligible?","answers":["No, they are ineligible","No"],"supports":[{"doc_id":"D039","sent_start":0,"sent_end":0}]}
+{"q_id":"Q024","question":"What evidence is required for trade receivable eligibility?","answers":["evidence of delivery or service completion","proof of delivery"],"supports":[{"doc_id":"D038","sent_start":0,"sent_end":0}]}
+{"q_id":"Q025","question":"What is required of the borrower entity structure?","answers":["bankruptcy-remote SPV","a bankruptcy-remote SPV"],"supports":[{"doc_id":"D044","sent_start":0,"sent_end":0}]}
+{"q_id":"Q026","question":"Which legal opinions are required at closing?","answers":["true sale and nonconsolidation opinions","true sale and non-consolidation"],"supports":[{"doc_id":"D043","sent_start":0,"sent_end":0}]}
+{"q_id":"Q027","question":"What is the minimum weighted average seasoning?","answers":["6 months","six months"],"supports":[{"doc_id":"D058","sent_start":0,"sent_end":0}]}
+{"q_id":"Q028","question":"When are daily sweeps to a controlled account required?","answers":["when the servicer rating falls below BB-","below BB-"],"supports":[{"doc_id":"D035","sent_start":0,"sent_end":0}]}
+{"q_id":"Q029","question":"What is the minimum level of the dilution reserve?","answers":["5%","five percent"],"supports":[{"doc_id":"D009","sent_start":0,"sent_end":0}]}
+{"q_id":"Q030","question":"Are late fees included in the collateral balance?","answers":["No, they are excluded","No"],"supports":[{"doc_id":"D037","sent_start":0,"sent_end":0}]}
