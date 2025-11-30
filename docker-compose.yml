@@ -1,0 +1,13 @@
+version: '3.9'
+services:
+  reg_api:
+    build: .
+    container_name: reg_api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./RAG/Data:/app/RAG/Data
+      - ./RAG/Data:/app/RAG/Data
+    environment:
+      - OPENAI_BASE_URL=http://host.docker.internal:1234/v1/
+      - OPENAI_API_KEY=llama3.2-1b-readcv

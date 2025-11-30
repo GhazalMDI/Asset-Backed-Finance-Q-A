@@ -8,10 +8,13 @@ from openai import OpenAI
 
 
 DATA_PATH = 'Data/docs.jsonl'
-INDEX_PATH = 'data/index.npy'
-META_PATH = 'data/meta.jsonl'
+INDEX_PATH = 'Data/index.npy'
+META_PATH = 'Data/meta.jsonl'
 DOCS_PATH = 'Data/docs.jsonl'
 OUTPUT_PATH = 'predictions.jsonl'
+ready=False
+client = OpenAI(base_url="http://localhost:1234/v1/",api_key="llma3.2-1b-readcv")
+
 
 def load_docs():
     docs = []
@@ -45,22 +48,25 @@ def build_index():
         for m in meta:
             f.write(json.dumps(m)+"\n")
 
-client = OpenAI(base_url="http://localhost:1234/v1/",api_key="llma3.2-1b-readcv")
+try:
+    embedding = np.load(INDEX_PATH)
 
-embedding = np.load(INDEX_PATH)
+    meta = []
+    with open(META_PATH,"r",encoding="utf-8") as f:
+        for line in f:
+            meta.append(json.loads(line))
 
-meta = []
-with open(META_PATH,"r",encoding="utf-8") as f:
-    for line in f:
-        meta.append(json.loads(line))
+    docs = {}
+    with open(DOCS_PATH,"r",encoding="utf-8") as f:
+        for line in f:
+            doc = json.loads(line)
+            docs[doc['doc_id']]=doc
 
-docs = {}
-with open(DOCS_PATH,"r",encoding="utf-8") as f:
-    for line in f:
-        doc = json.loads(line)
-        docs[doc['doc_id']]=doc
-
-model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+    model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+    ready=True
+except Exception as e:
+    print("ERROR loading RAG components:", e)
+    ready = False
 
 def question_to_embedding(question):
     return model.encode([question])[0]
@@ -109,7 +115,7 @@ def generate_answer_llm(question,top_sentences):
         print("LLM ERROR:", e)
         answer_text = "".join([s['sentence'] for s in top_sentences])
 
-    citations = [{"doc_id": s["doc_id"],"sent_start":s["sent_index"],"sent_end": s["sent_index"]} for s in top_sentences]
+    citations = [{"doc_id": s["doc_id"], "sent_start": s["sent_index"]} for s in top_sentences]
     retrieved_doc_ids = [s["doc_id"] for s in top_sentences]
     confidence = float(np.mean([s["score"] for s in top_sentences]))
 
@@ -121,5 +127,4 @@ def generate_answer_llm(question,top_sentences):
     }
 
 
-if __name__=="__main__":
-    build_index()
+
