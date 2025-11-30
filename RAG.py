@@ -1,13 +1,51 @@
+import json
+import numpy as np
+import os
+
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 from openai import OpenAI
 
-import numpy as np
-import json
 
-INDEX_PATH = 'Data/index.npy'
-META_PATH = 'Data/meta.jsonl'
+DATA_PATH = 'Data/docs.jsonl'
+INDEX_PATH = 'data/index.npy'
+META_PATH = 'data/meta.jsonl'
 DOCS_PATH = 'Data/docs.jsonl'
+OUTPUT_PATH = 'predictions.jsonl'
+
+def load_docs():
+    docs = []
+    with open(DATA_PATH,"r",encoding="utf-8") as f:
+        for line in f:
+            docs.append(json.loads(line))
+    return docs
+
+def build_index():
+    model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+    docs = load_docs()
+    all_sentences = []
+
+    meta = []
+
+    for doc in docs:
+        doc_id = doc['doc_id']
+        for i,sent in enumerate(doc["sentences"]):
+            all_sentences.append(sent)
+            meta.append({
+                "doc_id":doc_id,
+                "sent_index":i
+            })
+    embeddings = model.encode(all_sentences,batch_size=32,show_progress_bar=True)
+    embeddings = np.array(embeddings,dtype=np.float32)
+
+    os.makedirs(os.path.dirname(INDEX_PATH),exist_ok=True)
+    np.save(INDEX_PATH,embeddings)
+
+    with open(META_PATH,'w',encoding="utf-8") as f:
+        for m in meta:
+            f.write(json.dumps(m)+"\n")
+
+client = OpenAI(base_url="http://localhost:1234/v1/",api_key="llma3.2-1b-readcv")
 
 embedding = np.load(INDEX_PATH)
 
@@ -23,10 +61,11 @@ with open(DOCS_PATH,"r",encoding="utf-8") as f:
         docs[doc['doc_id']]=doc
 
 model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+
 def question_to_embedding(question):
     return model.encode([question])[0]
 
-def retrive_top_k(question,k=3):
+def retrieve_top_k(question,k=3):
     q_emb = question_to_embedding(question).reshape(1,-1)
     sims = cosine_similarity(q_emb,embedding).flatten()
 
@@ -46,27 +85,28 @@ def retrive_top_k(question,k=3):
 
 
 def generate_answer_llm(question,top_sentences):
-
     try:
-        client = OpenAI()
         context = "\n".join([f"- {s['sentence']}" for s in top_sentences])
+        print("hi ll 1")
         prompt = f"""
         Use the following context to answer the question concisely.
         Include citations if possible in format {{doc_id, sent_index}}.
 
         Context:
             {context}
-        Querstion:
+        Question:
             {question}
     Answer(short,grounded):
     """
+        print("hi ll 2")
         resp = client.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=[{"role":"user","content":prompt}],
-                temperature=0
+            model="llma3.2-1b-readcv",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0
         )
         answer_text = resp.choices[0].message.content.strip()
-    except:
+    except Exception as e:
+        print("LLM ERROR:", e)
         answer_text = "".join([s['sentence'] for s in top_sentences])
 
     citations = [{"doc_id": s["doc_id"],"sent_start":s["sent_index"],"sent_end": s["sent_index"]} for s in top_sentences]
@@ -79,3 +119,7 @@ def generate_answer_llm(question,top_sentences):
         "retrieved_doc_ids":retrieved_doc_ids,
         "confidence":confidence
     }
+
+
+if __name__=="__main__":
+    build_index()
