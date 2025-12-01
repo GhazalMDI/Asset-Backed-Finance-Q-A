@@ -2,6 +2,7 @@ import json
 import numpy as np
 import os
 
+
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 from openai import OpenAI
@@ -14,7 +15,6 @@ DOCS_PATH = 'Data/docs.jsonl'
 OUTPUT_PATH = 'predictions.jsonl'
 ready=False
 client = OpenAI(base_url="http://localhost:1234/v1/",api_key="llma3.2-1b-readcv")
-
 
 def load_docs():
     docs = []
@@ -49,7 +49,7 @@ def build_index():
             f.write(json.dumps(m)+"\n")
 
 try:
-    embedding = np.load(INDEX_PATH)
+    embeddings = np.load(INDEX_PATH)
 
     meta = []
     with open(META_PATH,"r",encoding="utf-8") as f:
@@ -73,7 +73,7 @@ def question_to_embedding(question):
 
 def retrieve_top_k(question,k=3):
     q_emb = question_to_embedding(question).reshape(1,-1)
-    sims = cosine_similarity(q_emb,embedding).flatten()
+    sims = cosine_similarity(q_emb,embeddings).flatten()
 
     topk_idx = np.argsort(sims)[::-1][:k]
     results = []
@@ -93,7 +93,6 @@ def retrieve_top_k(question,k=3):
 def generate_answer_llm(question,top_sentences):
     try:
         context = "\n".join([f"- {s['sentence']}" for s in top_sentences])
-        print("hi ll 1")
         prompt = f"""
         Use the following context to answer the question concisely.
         Include citations if possible in format {{doc_id, sent_index}}.
@@ -104,7 +103,6 @@ def generate_answer_llm(question,top_sentences):
             {question}
     Answer(short,grounded):
     """
-        print("hi ll 2")
         resp = client.chat.completions.create(
             model="llma3.2-1b-readcv",
             messages=[{"role": "user", "content": prompt}],
@@ -115,7 +113,7 @@ def generate_answer_llm(question,top_sentences):
         print("LLM ERROR:", e)
         answer_text = "".join([s['sentence'] for s in top_sentences])
 
-    citations = [{"doc_id": s["doc_id"], "sent_start": s["sent_index"]} for s in top_sentences]
+    citations = [{"doc_id": s["doc_id"], "sent_start": s["sent_index"],"sent_end": s["sent_index"]} for s in top_sentences]
     retrieved_doc_ids = [s["doc_id"] for s in top_sentences]
     confidence = float(np.mean([s["score"] for s in top_sentences]))
 
